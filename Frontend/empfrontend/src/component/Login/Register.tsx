@@ -17,8 +17,8 @@ export const Register: React.FC = () => {
 
     //useNavigate to navigate between components
     const navigate = useNavigate()
-    let pass:string = "";
-    let matchpass: string = "";
+    var pass:string = "";
+    var matchpass: string = "";
 
     //function to store input box values
     const storeValues = (input:any) => {
@@ -62,6 +62,12 @@ export const Register: React.FC = () => {
             alert("All Fields are mandatory. Please populate all fields before submitting")
             return
         }
+        if(user.userPass != matchpass){
+            alert(
+              "Passwords not matching. Please try again"
+            );
+            return;
+        }
 
         
         if ( user.role != "Manager".toLowerCase() ) {
@@ -79,7 +85,7 @@ export const Register: React.FC = () => {
 
         //console.log(user)
 
-        alert("This would have sent a post to the backend to create a user")
+        alert("!!!Account Created Successfully!!! Please try login .....")
 
         //after registration, send the user back to login page
         navigate("/")
@@ -123,13 +129,13 @@ export const Register: React.FC = () => {
             <table>
               <td>Role:</td>
               <td>
-                    <input
-                    type="text"
-                    placeholder="Role:Manager/Employee"
-                    name="role"
-                    onChange={storeValues}
-                    />
-                </td>
+                <input
+                  type="text"
+                  placeholder="Role:Manager/Employee"
+                  name="role"
+                  onChange={storeValues}
+                />
+              </td>
             </table>
           </div>
           <h3>Username/Password Info</h3>
@@ -158,6 +164,7 @@ export const Register: React.FC = () => {
               onChange={storeValues}
             />
           </div>
+         
           <br />
           <br />
 
