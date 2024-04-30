@@ -2,6 +2,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import "./styleLogin.css";
 import { UserInterface } from "../../Interfaces/UserInterface";
 import { useState } from "react";
+import { empData } from "../../Data/EmployeeData";
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -13,26 +14,48 @@ export const Login: React.FC = () => {
 
    const storeValue = (input: any) => {
     
-    if (input.target.name === "pass") {
+    if (input.target.name === "pass") {     
+        
       
-      setUser((user) => ({ ...user, userPass: input.target.value }));  
-       
+        setUser((user) => ({ ...user, userPass: input.target.value }));         
     }
-    else{      
+    else{       
       
-      setUser((user) => ({ ...user, userName: input.target.value }));  
-       
+      setUser((user) => ({ ...user, userName: input.target.value }));         
     }  
 
   
-    
+    console.log(" Inside Store values of login function");
+    console.log(user);
+
    };
 
 
   const loginfunc = async () => {
+
+  if(user.userName == "")
+    {
+      alert("Username can't be blank!")
+      return
+    }
+
+  if (user.userPass == "") {
+    alert("Password can't be blank!");
+    return;
+  }
+
+
     //TODO: send actual POST with user inputs
     console.log("send actual POST with user inputs");
-    console.log(user);
+    
+    empData.userName = user.userName;
+    empData.userPass = user.userPass;
+    empData.fname = user.fname;
+    empData.lname = user.lname;
+    empData.role = user.role;
+    empData.userId = user.userID;
+    console.log("empData in loginfunc")
+    console.log(empData);
 
     navigate("/emp");
   };

@@ -1,0 +1,53 @@
+
+.home-page{
+    display:flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items: center;
+}
+
+.navbar{
+    display:flex;
+    justify-content:end;
+}
+
+.home-container{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.reimb-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.reimb-button{
+    width: 60%;
+    background: #00a1e4; 
+    border-color: #02040F;
+    border-radius: 25px;
+    margin-top: 10px;
+}
+
+.reimb-button2{
+    width: 80%;
+    background: #00a1e4; 
+    border-color: #02040F;
+    border-radius: 25px;
+    margin-top: 10px;
+}
+
+input {
+    border-radius: 25px;
+}
+.reimb-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top:5%;
+}
