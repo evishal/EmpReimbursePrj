@@ -12,11 +12,12 @@ export const Register: React.FC = () => {
       userPass: "",
       fname: "",
       lname: "",
-      role: "",
+      role: "employee",
     });
 
     //useNavigate to navigate between components
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
     var pass:string = "";
     var matchpass: string = "";
 
@@ -55,41 +56,54 @@ export const Register: React.FC = () => {
     //function to send a POST with user data to register a user in the backend
     //! Remember, requests to our Java server will only work with @CrossOrigin in our Controllers
     const register = async () => {
+      /* Check if all mandatory values are populated */
+      if (
+        user.fname === "" ||
+        user.lname === "" ||
+        user.userName === "" ||
+        user.userPass === "" ||
+        user.role === ""
+      ) {
+        alert(
+          "All Fields are mandatory. Please populate all fields before submitting"
+        );
+        return;
+      }
+      if (user.userPass != matchpass) {
+        alert("Passwords not matching. Please try again");
+        return;
+      }
 
-        /* Check if all mandatory values are populated */
-        if ( user.fname === "" || user.lname === "" || user.userName === "" || user.userPass === "" || user.role === "")
-        {
-            alert("All Fields are mandatory. Please populate all fields before submitting")
-            return
-        }
-        if(user.userPass != matchpass){
-            alert(
-              "Passwords not matching. Please try again"
-            );
-            return;
-        }
+      if (user.role != "Manager".toLowerCase()) {
+        if (user.role != "Employee".toLowerCase())
+          alert(
+            "Invalid ROLE value: Valid values are Manager or Employee. Try again"
+          );
 
-        
-        if ( user.role != "Manager".toLowerCase() ) {
-            if ( user.role != "Employee".toLowerCase() ) 
-                  alert(
-                    "Invalid ROLE value: Valid values are Manager or Employee. Try again"
-                    );                   
+        return;
+      }
 
-          return
-        }
+      //TODO: We still need to implement the backend... this request goes nowhere
+      
+      const response = await (await axios.post("http://localhost:8080/users", user)
+                      .then((response) => {
+                        //if the create account is successful, greet user and ask him to login
+                        alert("Welcome, " + response.data.username);
 
+                        //use our useNavigate hook to switch views to the Catch Pokemon Component
+                        navigate("/");
+                      })
+                      .catch((error) => {
+                        alert("Create User Account Failed!Backend down");
+                      }) ) ; //If Create user account fails, tell the user that
+      
 
-        //TODO: We still need to implement the backend... this request goes nowhere
-        //const response = await axios.post("http://localhost:8080/SOME_ENDPOINT", user)
+      //console.log(user)
 
-        //console.log(user)
+      alert("!!!Account Created Successfully!!! Please try login .....");
 
-        alert("!!!Account Created Successfully!!! Please try login .....")
-
-        //after registration, send the user back to login page
-        navigate("/")
-
+      //after registration, send the user back to login page
+      navigate("/");
     }
 
 
