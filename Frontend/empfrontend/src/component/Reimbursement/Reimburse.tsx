@@ -48,6 +48,7 @@ export const Reimburse: React.FC = () => {
 
   const filterByStatus = (status: string) => {
     setReimburselist([]);
+    reimb.reimbid = 0; //Coded because the search reimb table is showing up . but need to fix the logic
     setfilteredReimbuseList(
       reimblist.filter((reimb) => {
         return reimb.status === status;
@@ -103,6 +104,7 @@ export const Reimburse: React.FC = () => {
     setfilteredReimbuseList([]);
     setReimburselist([]);
     setreimburseInput("true");
+    
   };
 
   const getReimburseWithReimbId = async () => {
@@ -195,6 +197,7 @@ export const Reimburse: React.FC = () => {
     //TODO Delete this code after backedn is implementd here
     setReimburselist(reimblist);
 
+    reimb.reimbid= 0 //Coded because the search reimb table is showing up . but need to fix the logic
     console.log("getAllReimburse");
     alert("getAllReimburse");
   };
