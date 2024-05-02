@@ -54,7 +54,15 @@
     margin-left: 50px;
     margin-right: 50px;
 }
-
+.reimb-button3{
+    width: 15%;
+    background: #00a1e4; 
+    border-color: #02040F;
+    border-radius: 25px;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
 input {
     border-radius: 25px;
 }

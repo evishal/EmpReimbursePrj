@@ -328,15 +328,39 @@ export const Reimburse: React.FC = () => {
                       <div>
                         <DisplayReimb {...reimb}></DisplayReimb>
 
-                        {reimb.status !== "approved" ? (
+                        {reimb.status !== "approved" ||
+                        emp.role === "manager" ||
+                        emp.role === "Manager" ? (
                           <button
-                            className="reimb-button"
+                            className="reimb-button3"
                             onClick={() => alert("Implement Delete here")}
                           >
                             Delete
                           </button>
                         ) : (
                           " "
+                        )}
+                        {(emp.role === "manager" || emp.role === "Manager") &&
+                        reimb.status !== "approved" ? (
+                          <button
+                            className="reimb-button3"
+                            onClick={() => alert("Implement Approval here")}
+                          >
+                            Approve
+                          </button>
+                        ) : (
+                          ""
+                        )}
+                        {(emp.role === "manager" || emp.role === "Manager") &&
+                        reimb.status === "pending" ? (
+                          <button
+                            className="reimb-button3"
+                            onClick={() => alert("Implement denied here")}
+                          >
+                            Deny
+                          </button>
+                        ) : (
+                          ""
                         )}
                       </div>
                     ))}
@@ -373,15 +397,39 @@ export const Reimburse: React.FC = () => {
                       <div>
                         <DisplayReimb {...reimb}></DisplayReimb>
 
-                        {reimb.status !== "approved" ? (
+                        {reimb.status !== "approved" ||
+                        emp.role === "manager" ||
+                        emp.role === "Manager" ? (
                           <button
-                            className="reimb-button"
+                            className="reimb-button3"
                             onClick={() => alert("Implement Delete here")}
                           >
                             Delete
                           </button>
                         ) : (
                           " "
+                        )}
+                        {(emp.role === "manager" || emp.role === "Manager") &&
+                        reimb.status !== "approved" ? (
+                          <button
+                            className="reimb-button3"
+                            onClick={() => alert("Implement Approval here")}
+                          >
+                            Approve
+                          </button>
+                        ) : (
+                          ""
+                        )}
+                        {(emp.role === "manager" || emp.role === "Manager") &&
+                        reimb.status === "pending" ? (
+                          <button
+                            className="reimb-button3"
+                            onClick={() => alert("Implement denied here")}
+                          >
+                            Deny
+                          </button>
+                        ) : (
+                          ""
                         )}
                       </div>
                     ))}

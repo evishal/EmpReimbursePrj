@@ -5,6 +5,6 @@ export const empData:any = {
        userPass:"pass" , 
        fname: "FirstName",
        lname :"TestLname",
-       role: "Employee",
+       role: "employee",
    
 }
