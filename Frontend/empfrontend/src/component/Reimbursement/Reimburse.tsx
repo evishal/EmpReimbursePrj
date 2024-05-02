@@ -46,14 +46,14 @@ export const Reimburse: React.FC = () => {
 
   const [filteredReimbuseList, setfilteredReimbuseList] = useState(reimblist);
 
-  const filterByStatus = (status:string) => {
+  const filterByStatus = (status: string) => {
     setReimburselist([]);
-    setfilteredReimbuseList( 
-      reimblist.filter ( (reimb ) => {
-      return reimb.status === status ;
-    })
-   )
-  }
+    setfilteredReimbuseList(
+      reimblist.filter((reimb) => {
+        return reimb.status === status;
+      })
+    );
+  };
   const [reimb, setReimb] = useState<ReimbInterface>({
     description: "",
     reimbid: 0,
@@ -79,19 +79,30 @@ export const Reimburse: React.FC = () => {
 
   useEffect(() => {
     setEmployees(empData);
+    setreimburseInput("false");
     console.log("Inside useEffect after page load. lets check reimburseList");
     console.log(reimburseList);
     setfilteredReimbuseList([]);
     //console.log(filteredReimbuseList);
-
   }, []);
 
   const storeValue = (input: any) => {
     userIn = input.target.value;
   };
 
+  const [reimburseInput, setreimburseInput] = useState("false");
+
+  const storeNewReimbInputs = (input: any) => {
+    if (input.target.name === "amount") reimb.amount = input.target.value;
+    if (input.target.name === "description")
+      reimb.description = input.target.value;
+  };
+
   const createNewReimbur = () => {
     alert("createNewReimbur implement here");
+    setfilteredReimbuseList([]);
+    setReimburselist([]);
+    setreimburseInput("true");
   };
 
   const getReimburseWithReimbId = async () => {
@@ -165,7 +176,7 @@ export const Reimburse: React.FC = () => {
   const getAllReimburse = async () => {
     console.log("Start getAllReimburse");
 
-    setfilteredReimbuseList([])
+    setfilteredReimbuseList([]);
     ///our GET request (remember to send withCredentials to confirm the user is logged in)
     const response = await axios
       .get("http://localhost:8080/reimburs", {
@@ -188,7 +199,50 @@ export const Reimburse: React.FC = () => {
     alert("getAllReimburse");
   };
 
- 
+  const cancelReimbSubmit = (input: any) => {
+    if (input.target.name === "amount") {
+      reimb.amount = 0;
+      input.target.value = 0;
+    }
+    if (input.target.name === "description") reimb.description = "";
+    input.target.value = "";
+
+    setreimburseInput("false");
+  };
+
+  //GET request to server to get all Reimbursements
+  const addReimburse = async () => {
+    console.log("Start addReimburse");
+    console.log(reimb);
+    reimb.userID = empData.userID
+    console.log(reimb);
+
+    //setfilteredReimbuseList([]);
+
+    ///our GET request (remember to send withCredentials to confirm the user is logged in)
+    const response = await axios
+      .post("http://localhost:8080/reimburs", reimb, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        //populate the reimbursmenet object recieved in response
+        setReimb(response.data);
+
+        console.log(response.data);
+      })
+      .catch((error) => {
+        alert("Post Reimbursment Failed!Backend down");
+      });
+
+      //TODO Delete this code after backend implementation
+    reimb.reimbid = 1;
+    reimb.status ="pending"
+    
+    console.log("addReimburse");
+    console.log(reimb)
+    alert(
+      "Reimbursement request received successfully!");
+  };
 
   return (
     <div>
@@ -220,7 +274,38 @@ export const Reimburse: React.FC = () => {
         </select>
       </div>
 
-      {reimburseList.length != 0 ? (
+      {reimburseInput === "true" ? (
+        <div className="text-container">
+          <h4>Please enter amount and description and click submit</h4>
+
+          <div className="input-container">
+            <input
+              type="number"
+              placeholder="amount"
+              name="amount"
+              onChange={storeNewReimbInputs}
+            />
+          </div>
+          <div className="input-container">
+            <input
+              type="text"
+              placeholder="description"
+              name="description"
+              onChange={storeNewReimbInputs}
+            />
+          </div>
+          <button className="login-button" onClick={addReimburse}>
+            Submit{" "}
+          </button>
+          <button className="login-button" onClick={cancelReimbSubmit}>
+            Cancel
+          </button>
+        </div>
+      ) : (
+        ""
+      )}
+
+      {reimburseList.length !== 0 ? (
         <div>
           <table className="table">
             <thead>
@@ -240,7 +325,7 @@ export const Reimburse: React.FC = () => {
                       <div>
                         <DisplayReimb {...reimb}></DisplayReimb>
 
-                        {reimb.status != "approved" ? (
+                        {reimb.status !== "approved" ? (
                           <button
                             className="reimb-button"
                             onClick={() => alert("Implement Delete here")}
@@ -264,7 +349,7 @@ export const Reimburse: React.FC = () => {
         ""
       )}
 
-      {filteredReimbuseList.length != 0 ? (
+      {filteredReimbuseList.length !== 0 ? (
         <div>
           <table className="table">
             <thead>
@@ -285,7 +370,7 @@ export const Reimburse: React.FC = () => {
                       <div>
                         <DisplayReimb {...reimb}></DisplayReimb>
 
-                        {reimb.status != "approved" ? (
+                        {reimb.status !== "approved" ? (
                           <button
                             className="reimb-button"
                             onClick={() => alert("Implement Delete here")}
