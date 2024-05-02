@@ -28,8 +28,32 @@ export const Reimburse: React.FC = () => {
       status: "pending",
       userID: 1,
     },
+    {
+      description: "test appr",
+      reimbid: 3,
+      amount: 5053,
+      status: "approved",
+      userID: 1,
+    },
+    {
+      description: "test eaa appr",
+      reimbid: 4,
+      amount: 9876,
+      status: "approved",
+      userID: 1,
+    },
   ];
 
+  const [filteredReimbuseList, setfilteredReimbuseList] = useState(reimblist);
+
+  const filterByStatus = (status:string) => {
+    setReimburselist([]);
+    setfilteredReimbuseList( 
+      reimblist.filter ( (reimb ) => {
+      return reimb.status === status ;
+    })
+   )
+  }
   const [reimb, setReimb] = useState<ReimbInterface>({
     description: "",
     reimbid: 0,
@@ -55,10 +79,19 @@ export const Reimburse: React.FC = () => {
 
   useEffect(() => {
     setEmployees(empData);
+    console.log("Inside useEffect after page load. lets check reimburseList");
+    console.log(reimburseList);
+    setfilteredReimbuseList([]);
+    //console.log(filteredReimbuseList);
+
   }, []);
 
   const storeValue = (input: any) => {
     userIn = input.target.value;
+  };
+
+  const createNewReimbur = () => {
+    alert("createNewReimbur implement here");
   };
 
   const getReimburseWithReimbId = async () => {
@@ -130,6 +163,9 @@ export const Reimburse: React.FC = () => {
 
   //GET request to server to get all Reimbursements
   const getAllReimburse = async () => {
+    console.log("Start getAllReimburse");
+
+    setfilteredReimbuseList([])
     ///our GET request (remember to send withCredentials to confirm the user is logged in)
     const response = await axios
       .get("http://localhost:8080/reimburs", {
@@ -152,6 +188,8 @@ export const Reimburse: React.FC = () => {
     alert("getAllReimburse");
   };
 
+ 
+
   return (
     <div>
       <h6>Employee username: {emp.userName}</h6>
@@ -160,68 +198,138 @@ export const Reimburse: React.FC = () => {
       </h6>
       <h6>Employee Role: {emp.role}</h6>
 
-      <div className="home-page">
-        <div className="home-container">
-          <input
-            type="number"
-            placeholder="Search your reimbursement with ID:"
-            onChange={storeValue}
-          />
-          <button className="reimb-button" onClick={getReimburseWithReimbId}>
-            Find This Reimbursement
-          </button>
-
-          {reimb.reimbid ? (
-            <div>
-              <h3>Reimbursement Details:</h3>
-              <div className="reimb-container">
-                <ReimbResult {...reimb}></ReimbResult>
-              </div>
-            </div>
-          ) : (
-            ""
-          )}
-        </div>
-      </div>
       <div className="reimb-container">
-        <button className="reimb-button2" onClick={getAllReimburse}>
-          Find All Reimbursement
+        <button className="reimb-button2" onClick={createNewReimbur}>
+          Create New Reimbursement
         </button>
-      </div>
-      <br />
-      <br />
-      <br />
-      <div>
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">Reimbursement Details</th>              
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <div className="collection-container">
-                  {/* using map(), for every reimbursmenet that belongs to the logged in user... 
-            Display one Reimbursement component, and a button to delete it*/}
-                  {reimburseList.map((reimb, index) => (
-                    <div>
-                      <DisplayReimb {...reimb}></DisplayReimb>
-                      <button
-                        className="reimb-button"
-                        onClick={() => alert("Implement Delete here")}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  ))}
 
-                  {/* If you need to render multiple things in map(), they need to be in a <div> */}
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <button className="reimb-button2" onClick={getAllReimburse}>
+          Show All Reimbursement
+        </button>
+
+        <select
+          className="form-select"
+          aria-label="Default select example"
+          onChange={(e) => filterByStatus(e.target.value)}
+        >
+          <option value="Select Status" disabled selected>
+            Select Status
+          </option>
+          <option value="pending">pending</option>
+          <option value="approved">approved</option>
+        </select>
+      </div>
+
+      {reimburseList.length != 0 ? (
+        <div>
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">
+                  Reimbursement Details:{reimburseList.length} records
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div className="collection-container">
+                    {/* using map(), for every reimbursmenet that belongs to the logged in user... 
+            Display one Reimbursement component, and a button to delete it*/}
+                    {reimburseList.map((reimb, index) => (
+                      <div>
+                        <DisplayReimb {...reimb}></DisplayReimb>
+
+                        {reimb.status != "approved" ? (
+                          <button
+                            className="reimb-button"
+                            onClick={() => alert("Implement Delete here")}
+                          >
+                            Delete
+                          </button>
+                        ) : (
+                          " "
+                        )}
+                      </div>
+                    ))}
+
+                    {/* If you need to render multiple things in map(), they need to be in a <div> */}
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        ""
+      )}
+
+      {filteredReimbuseList.length != 0 ? (
+        <div>
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">
+                  Filtered Reimbursement Details:{filteredReimbuseList.length}{" "}
+                  records
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div className="collection-container">
+                    {/* using map(), for every reimbursmenet that belongs to the logged in user... 
+            Display one Reimbursement component, and a button to delete it*/}
+                    {filteredReimbuseList.map((reimb, index) => (
+                      <div>
+                        <DisplayReimb {...reimb}></DisplayReimb>
+
+                        {reimb.status != "approved" ? (
+                          <button
+                            className="reimb-button"
+                            onClick={() => alert("Implement Delete here")}
+                          >
+                            Delete
+                          </button>
+                        ) : (
+                          " "
+                        )}
+                      </div>
+                    ))}
+
+                    {/* If you need to render multiple things in map(), they need to be in a <div> */}
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        ""
+      )}
+
+      <div className="reimb-container">
+        <input
+          className="reimb-input"
+          type="number"
+          placeholder="Search your reimbursement with ID:"
+          onChange={storeValue}
+        />
+        <button className="reimb-button" onClick={getReimburseWithReimbId}>
+          View This Reimbursement
+        </button>
+
+        {reimb.reimbid ? (
+          <div>
+            <h3>Reimbursement Details:</h3>
+            <div className="reimb-container">
+              <ReimbResult {...reimb}></ReimbResult>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

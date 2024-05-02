@@ -26,20 +26,33 @@
     align-items: center;
 }
 
-.reimb-button{
-    width: 60%;
-    background: #00a1e4; 
-    border-color: #02040F;
-    border-radius: 25px;
+.reimb-input{
+    width: 30%;
+    background: #f2f3f4; 
+    border-color: #01030f;
+    border-radius: 50px;
     margin-top: 10px;
+    margin-left: 50px;
+    margin-right: 50px;
 }
 
-.reimb-button2{
-    width: 20%;
+.reimb-button{
+    width: 30%;
     background: #00a1e4; 
     border-color: #02040F;
     border-radius: 25px;
     margin-top: 10px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+.reimb-button2{
+    width: 40%;
+    background: #00a1e4; 
+    border-color: #02040F;
+    border-radius: 25px;
+    margin-top: 10px;
+    margin-left: 50px;
+    margin-right: 50px;
 }
 
 input {
